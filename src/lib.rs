@@ -15,7 +15,7 @@ pub enum CowT<'a, B: ?Sized + ToOwned<Owned = O> + 'a, O> {
     Owned(O),
 }
 
-/// Like [`borrow::Cow`](alloc::borrow::Cow), but `T` is covariant
+/// Like [`borrow::Cow<'a, B>`](alloc::borrow::Cow), but `B` is covariant
 ///
 /// # Examples
 ///
@@ -45,7 +45,7 @@ pub enum CowT<'a, B: ?Sized + ToOwned<Owned = O> + 'a, O> {
 ///
 /// let borrowed = Cow::Borrowed("foo");
 /// ```
-pub type Cow<'a, T> = CowT<'a, T, <T as ToOwned>::Owned>;
+pub type Cow<'a, B> = CowT<'a, B, <B as ToOwned>::Owned>;
 
 impl<B: ?Sized + ToOwned> Cow<'_, B> {
     /// Acquires a mutable reference to the owned form of the data.

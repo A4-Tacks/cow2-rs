@@ -1,4 +1,4 @@
-Like `Cow<'_, T>`, but `T` is covariant
+Like `Cow<'_, B>`, but `B` is covariant
 
 Implemented similar to [rust#96312]
 

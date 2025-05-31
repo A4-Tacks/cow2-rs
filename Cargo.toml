@@ -1,12 +1,12 @@
 [package]
 name = "cow2"
-version = "0.2.3"
+version = "0.2.4"
 edition = "2021"
 
 authors = ["A4-Tacks <wdsjxhno1001@163.com>"]
 keywords = ["no_std", "cow", "string", "str", "slice"]
 categories = ["no-std", "rust-patterns"]
-description = "Like Cow, but T is covariant"
+description = "Like Cow<B>, but B is covariant"
 
 license = "MIT"
 repository = "https://github.com/A4-Tacks/cow2-rs"
