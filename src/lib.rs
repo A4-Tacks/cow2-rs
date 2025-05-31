@@ -27,6 +27,18 @@ pub enum CowT<'a, B: ?Sized + ToOwned<Owned = O>, O> {
 ///     foo(x);
 /// }
 /// ```
+///
+/// ```
+/// use cow2::Cow;
+///
+/// fn foo<'a>(_: Cow<'a, Cow<'a, [Cow<'a, str>]>>) { }
+/// fn bar<'a>(x: Cow<'a, Cow<'a, [Cow<'static, str>]>>) {
+///     foo(x);
+/// }
+/// fn baz<'a>(x: Cow<'a, Cow<'static, [Cow<'static, str>]>>) {
+///     bar(x);
+/// }
+/// ```
 pub type Cow<'a, T> = CowT<'a, T, <T as ToOwned>::Owned>;
 
 impl<B: ?Sized + ToOwned> Cow<'_, B> {
