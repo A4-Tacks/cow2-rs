@@ -10,7 +10,7 @@ use alloc::borrow::ToOwned;
 mod like_impls;
 
 /// Auxiliary enum of [`Cow`]
-pub enum CowT<'a, B: ?Sized + ToOwned<Owned = O>, O> {
+pub enum CowT<'a, B: ?Sized + ToOwned<Owned = O> + 'a, O> {
     Borrowed(&'a B),
     Owned(O),
 }
