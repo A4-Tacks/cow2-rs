@@ -15,7 +15,7 @@ pub enum CowT<'a, B: ?Sized + ToOwned, O> {
     Owned(O),
 }
 
-/// Like [`borrow::Cow`], but `T` is covariant
+/// Like [`borrow::Cow`](alloc::borrow::Cow), but `T` is covariant
 ///
 /// # Examples
 ///
