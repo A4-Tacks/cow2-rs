@@ -10,7 +10,7 @@ use alloc::borrow::ToOwned;
 mod like_impls;
 
 /// Auxiliary enum of [`Cow`]
-pub enum CowT<'a, B: ?Sized + ToOwned, O> {
+pub enum CowT<'a, B: ?Sized + ToOwned<Owned = O>, O> {
     Borrowed(&'a B),
     Owned(O),
 }
@@ -102,7 +102,7 @@ impl<B: ?Sized + ToOwned> Cow<'_, B> {
     }
 }
 
-impl<B: ?Sized + ToOwned, O: Clone> Clone for CowT<'_, B, O> {
+impl<B: ?Sized + ToOwned<Owned = O>, O: Clone> Clone for CowT<'_, B, O> {
     fn clone(&self) -> Self {
         match self {
             Self::Borrowed(borrowed) => Self::Borrowed(borrowed),
@@ -111,7 +111,7 @@ impl<B: ?Sized + ToOwned, O: Clone> Clone for CowT<'_, B, O> {
     }
 }
 
-impl<B: ?Sized + ToOwned, O: Borrow<B>> Deref for CowT<'_, B, O> {
+impl<B: ?Sized + ToOwned<Owned = O>, O: Borrow<B>> Deref for CowT<'_, B, O> {
     type Target = B;
 
     fn deref(&self) -> &Self::Target {
