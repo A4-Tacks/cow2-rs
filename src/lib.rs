@@ -9,6 +9,12 @@ use alloc::borrow::ToOwned;
 
 mod like_impls;
 
+/// Auxiliary enum of [`Cow`]
+pub enum CowT<'a, B: ?Sized + ToOwned<Owned = O>, O> {
+    Borrowed(&'a B),
+    Owned(O),
+}
+
 /// Like [`borrow::Cow`](alloc::borrow::Cow), but `T` is covariant
 ///
 /// # Examples
@@ -33,10 +39,7 @@ mod like_impls;
 ///     bar(x);
 /// }
 /// ```
-pub enum Cow<'a, B: ?Sized + 'a, O = <B as ToOwned>::Owned> {
-    Borrowed(&'a B),
-    Owned(O),
-}
+pub type Cow<'a, T> = CowT<'a, T, <T as ToOwned>::Owned>;
 
 impl<B: ?Sized + ToOwned> Cow<'_, B> {
     /// Acquires a mutable reference to the owned form of the data.
@@ -58,14 +61,14 @@ impl<B: ?Sized + ToOwned> Cow<'_, B> {
     /// ```
     pub fn to_mut(&mut self) -> &mut B::Owned {
         match self {
-            Cow::Borrowed(borrowed) => {
+            CowT::Borrowed(borrowed) => {
                 *self = Self::Owned(borrowed.to_owned());
                 match self {
-                    Cow::Borrowed(_) => unreachable!(),
-                    Cow::Owned(owned) => owned,
+                    CowT::Borrowed(_) => unreachable!(),
+                    CowT::Owned(owned) => owned,
                 }
             },
-            Cow::Owned(owned) => owned,
+            CowT::Owned(owned) => owned,
         }
     }
 
@@ -105,13 +108,13 @@ impl<B: ?Sized + ToOwned> Cow<'_, B> {
     /// ```
     pub fn into_owned(self) -> B::Owned {
         match self {
-            Cow::Borrowed(borrowed) => borrowed.to_owned(),
-            Cow::Owned(owned) => owned,
+            CowT::Borrowed(borrowed) => borrowed.to_owned(),
+            CowT::Owned(owned) => owned,
         }
     }
 }
 
-impl<B: ?Sized + ToOwned<Owned = O>, O: Clone> Clone for Cow<'_, B, O> {
+impl<B: ?Sized + ToOwned<Owned = O>, O: Clone> Clone for CowT<'_, B, O> {
     fn clone(&self) -> Self {
         match self {
             Self::Borrowed(borrowed) => Self::Borrowed(borrowed),
@@ -120,13 +123,13 @@ impl<B: ?Sized + ToOwned<Owned = O>, O: Clone> Clone for Cow<'_, B, O> {
     }
 }
 
-impl<B: ?Sized + ToOwned<Owned = O>, O: Borrow<B>> Deref for Cow<'_, B, O> {
+impl<B: ?Sized + ToOwned<Owned = O>, O: Borrow<B>> Deref for CowT<'_, B, O> {
     type Target = B;
 
     fn deref(&self) -> &Self::Target {
         match self {
-            Cow::Borrowed(borrowed) => borrowed,
-            Cow::Owned(owned) => owned.borrow(),
+            CowT::Borrowed(borrowed) => borrowed,
+            CowT::Owned(owned) => owned.borrow(),
         }
     }
 }
