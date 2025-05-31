@@ -39,6 +39,12 @@ pub enum CowT<'a, B: ?Sized + ToOwned<Owned = O>, O> {
 ///     bar(x);
 /// }
 /// ```
+///
+/// ```
+/// use cow2::Cow;
+///
+/// let borrowed = Cow::Borrowed("foo");
+/// ```
 pub type Cow<'a, T> = CowT<'a, T, <T as ToOwned>::Owned>;
 
 impl<B: ?Sized + ToOwned> Cow<'_, B> {
