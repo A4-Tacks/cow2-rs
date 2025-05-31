@@ -1,6 +1,6 @@
 Like `Cow`, but `T` is covariant
 
-Implemented [rust#96312]
+Implemented similar to [rust#96312]
 
 Since `std::borrow::Cow` uses associated type, it invariant,
 see [rust#115799] for details
