@@ -1,6 +1,6 @@
 [package]
 name = "cow2"
-version = "0.2.5"
+version = "0.2.6"
 edition = "2021"
 
 authors = ["A4-Tacks <wdsjxhno1001@163.com>"]
@@ -12,6 +12,9 @@ license = "MIT"
 repository = "https://github.com/A4-Tacks/cow2-rs"
 
 readme = "README.md"
+
+[package.metadata.docs.rs]
+all-features = true
 
 [features]
 default = []
